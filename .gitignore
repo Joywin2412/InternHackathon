@@ -1,0 +1,5 @@
+/darknet
+/img_align_celeba
+/llama
+*.zip
+*.weights
