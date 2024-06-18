@@ -6,6 +6,7 @@
 # Bangs: No
 # Big_Lips: No
 
+# The above are the attributes in which we are going to give the user. This is for visually impaired users face description.
 import google.generativeai as genai
 import os
 

@@ -1,3 +1,5 @@
+# This is for visually impaired social media
+
 import google.generativeai as genai
 import os
 
