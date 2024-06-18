@@ -1,5 +1,14 @@
-# This is for visually impaired social media. llama2 will add faces to db and gives faces description back to llama.
+# This feature is for normally people for face description
 
+# 5_o_Clock_Shadow: No
+# Arched_Eyebrows: No
+# Attractive: No
+# Bags_Under_Eyes: No
+# Bald: No
+# Bangs: No
+# Big_Lips: No
+
+# The above are the attributes in which we are going to give the user. This is for general users face description.
 import google.generativeai as genai
 import os
 
@@ -17,15 +26,12 @@ def generate_response(prompt, rules, context, conversation_history, max_tokens=1
 
 # Define your rules, context, and initial prompt
 rules = (
-    "1. I'll give you an environment with the word Environment followed by semicolon.\n"
-    "2. I'll ask questions with the word Question followed by a question. Be straightforward\n"
-    "3. You will be told to append something at the end of the prompt. Only append something at the end of the prompt if mentioned in the rules or else there will be penalty \n"
-    "4. If there is mention of people in the environment which you describe, you have to ask the user if they know the person. \n"
-    "5. You have to wait for them to reply.If they say they know the person then you have to tell them to wait as you will describe the people and you have to append the string Test at the end of the prompt. \n"
-    "6. If the user doesn't like your response regenerate the previous response in a different manner."
+    "1. If you are given a [?Image] text in the prompt , you have to ask the user who this person is.\n"
+    "3. Only if they give a name you have to add continue at the end of the prompt\n"
+    "4. If they say they don't know the person, you have to append test at the end of prompt\n"
 )   
 context = "This conversation is about providing answers to the user's questions. The answers should be clear and concise."
-initial_prompt = "Environment: Bird is sitting on a tree. There is a bottle, dustbin somewhere. A photograph of a group of friends taking a selfie. Question: Give a description of the environment."
+initial_prompt = "[?Image]"
 
 # Initialize conversation history
 conversation_history = ""
