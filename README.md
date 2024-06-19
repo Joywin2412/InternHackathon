@@ -21,6 +21,6 @@ To run this project, follow these steps:
 1. Install required Python packages:
    ```bash
    pip install -r requirements.txt
-2.Download yolov4.weights from here and place it in the project directory.
+2.Download yolov4.weights from https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights and place it in the project directory.
 
 3.Obtain your Google Gemini API key and store it in an environment file (.env)
