@@ -3,3 +3,5 @@
 /llama
 *.zip
 *.weights
+.env/
+.env
