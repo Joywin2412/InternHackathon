@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GrAttachment } from "react-icons/gr";
 import { IoMdSend } from "react-icons/io";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import AttachMenu from "./AttachMenu";
 import AttachmentPreview from "./AttachmentPreview";
+const axios = require("axios");
+const FormData = require("form-data");
 
 interface PromptAreaProps {
   isSidebarOpen: boolean;
+  addMessage: (message: string, attachments: File[], isUserMessage: boolean) => void;
 }
 
-const PromptArea: React.FC<PromptAreaProps> = ({ isSidebarOpen }) => {
+const PromptArea: React.FC<PromptAreaProps> = ({ isSidebarOpen, addMessage }) => {
   const [isAttachMenuOpen, setIsAttachMenuOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [messageText, setMessageText] = useState("");
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (file: File) => {
     setSelectedFiles((prevFiles) => [...prevFiles, file]);
@@ -38,6 +44,42 @@ const PromptArea: React.FC<PromptAreaProps> = ({ isSidebarOpen }) => {
 
   const closeAttachMenu = () => {
     setIsAttachMenuOpen(false);
+  };
+
+  const handleSendMessage = async () => {
+    if (!messageText.trim() && selectedFiles.length === 0) return;
+
+    addMessage(messageText, selectedFiles, true);
+
+    let data = new FormData();
+    data.append("session_id", "u1");
+    if (selectedFiles.length > 0) {
+      data.append("image_url", selectedFiles[0]);
+    }
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://127.0.0.1:8000/app/image-desc",
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      addMessage(response.data.data, [], false);
+    } catch (error) {
+      console.error("error is", error);
+    }
+
+    setMessageText("");
+    setSelectedFiles([]);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
   useEffect(() => {
@@ -83,10 +125,14 @@ const PromptArea: React.FC<PromptAreaProps> = ({ isSidebarOpen }) => {
           )}
           <input
             type="text"
+            ref={inputRef}
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            onKeyPress={handleKeyPress}
             placeholder="How can AbilitySync help you today?"
             className="bg-gray-800 text-white placeholder-gray-500 focus:outline-none flex-grow px-2"
           />
-          <button className="ml-4">
+          <button onClick={handleSendMessage} className="ml-4">
             <IoMdSend />
           </button>
           <button className="ml-2">
@@ -99,6 +145,3 @@ const PromptArea: React.FC<PromptAreaProps> = ({ isSidebarOpen }) => {
 };
 
 export default PromptArea;
-
-
-

@@ -25,6 +25,7 @@ class ImageDescriptionView(APIView):
             serializer.save()
             try:
                 print("In the post func of Image Desc")
+                print(serializer.data)
                 imageurl = serializer.data['image_url'][1:]
                 session_id = serializer.data['session_id']
                 salesforce_output=salesforceCaptioning(imageurl)

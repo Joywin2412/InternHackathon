@@ -126,6 +126,14 @@ def YOLO(imageurl,session_id):
     i = 0
     print(len(detected_faces))
     # return detected_faces, object_response
+    if(os.path.exists(f"media/yolo/{session_id}")):
+        print("Already exists")
+        for i in os.listdir(f"media/yolo/{session_id}"):
+            os.remove(f"media/yolo/{session_id}/{i}")
+            print(i)
+        os.rmdir(f"media/yolo/{session_id}")
+    
+    
     os.mkdir(f"media/yolo/{session_id}")
     for face in (detected_faces):
         try:

@@ -12,6 +12,8 @@ opencv-python
 numpy
 torch
 python-dotenv
+djangorestframework
+django-cors-headers
 # yolov4.weights
 # yolov4.cfg
 # coco.names
